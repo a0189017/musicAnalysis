@@ -90,18 +90,39 @@ func GetAnalysisState()(ResultCode int,result interface{}){
         State string `bson:"_id" json:"state"`
         Count int `bson:"count" json:"count"`
     }
+    type memberCountry struct{
+        Country string `bson:"_id" json:"country"`
+        Count int `bson:"count" json:"count"`
+    }
     type analysisResult struct{
         OnlineCount int
-        ResultState []memberState
+        ResultUSA []memberState
+        ResultCAN []memberState
+        ResultOther []memberCountry
     }
-    var dbResultState []memberState
-
+    var dbResultUSA []memberState
+    var dbResultCAN []memberState
+    var dbResultOhter []memberCountry
+    //USA
+    matchStage := bson.D{{"$match", bson.D{{"country","USA"}}}}
     groupStage := bson.D{{"$group", bson.D{{"_id", "$state"},{"count", bson.D{{"$sum", 1}}}}}}
     sortStage := bson.D{{"$sort", bson.D{{"_id", 1}}}}
-    resultInfo,_ :=conn.Aggregate(context.TODO(), mongo.Pipeline{ groupStage,sortStage})
-    resultInfo.All(context.TODO(), &dbResultState)
+    resultInfo,_ :=conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage,groupStage,sortStage})
+    resultInfo.All(context.TODO(), &dbResultUSA)
+    //CAN
+    matchStage = bson.D{{"$match", bson.D{{"country","CAN"}}}}
+    groupStage = bson.D{{"$group", bson.D{{"_id", "$state"},{"count", bson.D{{"$sum", 1}}}}}}
+    sortStage = bson.D{{"$sort", bson.D{{"_id", 1}}}}
+    resultInfo,_ =conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage,groupStage,sortStage})
+    resultInfo.All(context.TODO(), &dbResultCAN)
+    //Other
+    matchStage = bson.D{{"$match", bson.D{{"country",bson.M{"$ne":"USA"}},{"country",bson.M{"$ne":"CAN"}}}}}
+    groupStage = bson.D{{"$group", bson.D{{"_id", "$country"},{"count", bson.D{{"$sum", 1}}}}}}
+    sortStage = bson.D{{"$sort", bson.D{{"_id", 1}}}}
+    resultInfo,_ =conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage,groupStage,sortStage})
+    resultInfo.All(context.TODO(), &dbResultOhter)
 
-    result =analysisResult{onlineCount,dbResultState}
+    result =analysisResult{onlineCount,dbResultUSA,dbResultCAN,dbResultOhter}
     return ResultCode,result
 
 }
