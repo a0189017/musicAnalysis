@@ -142,15 +142,32 @@ func GetAnalysisFeedback()(ResultCode int,result interface{}){
     }
     type analysisResult struct{
         OnlineCount int
-        ResultScore []memberScore
+        ResultFeel []memberScore
+        ResultFocus []memberScore
+        ResultExpress []memberScore
         ResultFeedback []memberFeedback
     }
-    //avg score  
-    var dbResultScore []memberScore
+    //Feel score  
+    var dbResultFeel []memberScore
+    matchStage := bson.D{{"$match", bson.M{"type":"feel"}}}
     groupStage := bson.D{{"$group", bson.D{{"_id", "$score"},{"count", bson.D{{"$sum", 1}}}}}}
     sortStage := bson.D{{"$sort", bson.D{{"_id", 1}}}}
-    resultInfo,_ :=conn.Aggregate(context.TODO(), mongo.Pipeline{ groupStage,sortStage})
-    resultInfo.All(context.TODO(), &dbResultScore)
+    resultInfo,_ :=conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage, groupStage,sortStage})
+    resultInfo.All(context.TODO(), &dbResultFeel)
+    //Focus score  
+    var dbResultFocus []memberScore
+    matchStage = bson.D{{"$match", bson.M{"type":"focus"}}}
+    groupStage = bson.D{{"$group", bson.D{{"_id", "$score"},{"count", bson.D{{"$sum", 1}}}}}}
+    sortStage = bson.D{{"$sort", bson.D{{"_id", 1}}}}
+    resultInfo,_ =conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage, groupStage,sortStage})
+    resultInfo.All(context.TODO(), &dbResultFocus)
+    //Express score  
+    var dbResultExpress []memberScore
+    matchStage = bson.D{{"$match", bson.M{"type":"express"}}}
+    groupStage = bson.D{{"$group", bson.D{{"_id", "$score"},{"count", bson.D{{"$sum", 1}}}}}}
+    sortStage = bson.D{{"$sort", bson.D{{"_id", 1}}}}
+    resultInfo,_ =conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage, groupStage,sortStage})
+    resultInfo.All(context.TODO(), &dbResultExpress)
     //memberFeedback
     var dbResultFeedback []memberFeedback
     sortStage = bson.D{{"$sort", bson.D{{"create_time", -1}}}}
@@ -158,7 +175,7 @@ func GetAnalysisFeedback()(ResultCode int,result interface{}){
     resultInfo.All(context.TODO(), &dbResultFeedback)
 
 
-    result =analysisResult{onlineCount,dbResultScore,dbResultFeedback}
+    result =analysisResult{onlineCount,dbResultFeel,dbResultFocus,dbResultExpress,dbResultFeedback}
     return ResultCode,result
 
 }

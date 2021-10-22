@@ -27,7 +27,7 @@ func MemberFeedBack(w http.ResponseWriter, r *http.Request) {
 	if(tokenStatus=="error"){
 		response = controller.ApiResponse{ResultCode:3, ResultMessage:controller.ErrorMessage["error3"]}
 		services.ResponseWithJson(w, http.StatusBadRequest, response) //回傳
-	}else if(len(data.FeedBack)==0){
+	}else if(len(data.FeedBack)==0 || len(data.Type)==0 ){
 		response = controller.ApiResponse{ResultCode:2, ResultMessage:controller.ErrorMessage["error2"]}
 		services.ResponseWithJson(w, http.StatusBadRequest, response) //回傳
 	}else{
