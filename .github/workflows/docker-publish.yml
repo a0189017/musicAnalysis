@@ -47,7 +47,7 @@ jobs:
         uses: appleboy/ssh-action@v0.0.6
         with:
           host: ${{ secrets.GCP_HOST }}
-          username: deploy
+          username: gcpecholife
           key: ${{ secrets.GCP_PRIVATE_KEY }}
           script_stop: true
           script: |
