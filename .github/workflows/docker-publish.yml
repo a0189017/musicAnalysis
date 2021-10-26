@@ -43,3 +43,14 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/api:latest
+      - name: Update the API service
+        uses: appleboy/ssh-action@v0.0.6
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: deploy
+          key: ${{ secrets.GCP_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            sudo -i && cd /home/web && docker-compose pull && docker-compose up -d
+
+
