@@ -51,6 +51,6 @@ jobs:
           key: ${{ secrets.GCP_PRIVATE_KEY }}
           script_stop: true
           script: |
-            sudo -i && cd /home/web && docker-compose pull && docker-compose up -d
+            sudo -i && cd /home/web && sudo docker-compose pull && sudo docker-compose up -d
 
 
