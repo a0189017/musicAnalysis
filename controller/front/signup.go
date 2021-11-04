@@ -11,12 +11,12 @@ import (
 	"api/controller"
 )
 
-func MemberSingup(w http.ResponseWriter, r *http.Request) {
+func MemberSignup(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1024)) //io.LimitReader限制大小
 	if err != nil {
 		fmt.Println(err)
 	}
-	var memberInfo frontServices.MemberSingup
+	var memberInfo frontServices.SignupData
 	body =services.InputCheck(string(body))
 	json.Unmarshal(body, &memberInfo) //轉為json
 	defer r.Body.Close()
@@ -25,7 +25,7 @@ func MemberSingup(w http.ResponseWriter, r *http.Request) {
 		response = controller.ApiResponse{ResultCode:2, ResultMessage:controller.ErrorMessage["error2"]}
 		services.ResponseWithJson(w, http.StatusBadRequest, response) //回傳
 	}else{
-		ResultCode,result :=frontServices.SetMemberSingup(memberInfo)
+		ResultCode,result :=frontServices.SetMemberSignup(memberInfo)
 		response = controller.ApiResponse{ResultCode:ResultCode, ResultMessage:result}
 		switch(ResultCode){
 			case 0:

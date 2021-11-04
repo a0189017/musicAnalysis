@@ -22,7 +22,7 @@ var routesManager []Route
 func init() {
 	/* front  */
 	//POST
-	register("POST", "/singup", frontController.MemberSingup, nil)
+	register("POST", "/signup", frontController.MemberSignup, nil)
 	register("POST", "/login", frontController.MemberLogin, nil)
 	register("POST", "/feedBack", frontController.MemberFeedBack, nil)
 	register("POST", "/record", frontController.MemberRecord, nil)

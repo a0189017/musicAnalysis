@@ -26,7 +26,7 @@ func ResponseWithJson(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 func DbConnect(db string, collection string)(conn *mongo.Collection ,client *mongo.Client) {
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://172.31.0.2:27017"))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
     if err != nil {
     	return nil,nil
 	}

@@ -7,7 +7,7 @@ import (
     "api/services"
     "time"
 )
-type MemberSingup struct {
+type SignupData struct {
     Email   string
     Password string
     Name string
@@ -17,11 +17,11 @@ type MemberSingup struct {
     City string
     Gender string
 }
-func SetMemberSingup(data MemberSingup)(ResultCode int,result string){
+func SetMemberSignup(data SignupData)(ResultCode int,result string){
 	conn,client :=services.DbConnect("project", "member")
     defer client.Disconnect(context.TODO())
     //find
-    var resultIDExist MemberSingup
+    var resultIDExist SignupData
     error_staus :=0
     filter := bson.M{"email":data.Email}
     conn.FindOne(context.TODO(), filter).Decode(&resultIDExist)
