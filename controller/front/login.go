@@ -22,7 +22,7 @@ func MemberLogin(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var response controller.ApiResponse
 	
-	if(len(memberInfo.Email)==0 || len(memberInfo.Password)==0){
+	if(len(memberInfo.UID)==0){
 		response = controller.ApiResponse{ResultCode:2, ResultMessage:controller.ErrorMessage["error2"]}
 		services.ResponseWithJson(w, http.StatusBadRequest, response) //回傳
 	}else{

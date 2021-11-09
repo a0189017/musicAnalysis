@@ -8,8 +8,7 @@ import (
     "time"
 )
 type SignupData struct {
-    Email   string
-    Password string
+    UID   string
     Name string
     Birthday string
     Country string
@@ -23,9 +22,9 @@ func SetMemberSignup(data SignupData)(ResultCode int,result string){
     //find
     var resultIDExist SignupData
     error_staus :=0
-    filter := bson.M{"email":data.Email}
+    filter := bson.M{"UID":data.UID}
     conn.FindOne(context.TODO(), filter).Decode(&resultIDExist)
-    if resultIDExist.Email!=""{
+    if resultIDExist.UID!=""{
         result="帳號重複！"
         error_staus=1
         ResultCode=5
@@ -34,7 +33,7 @@ func SetMemberSignup(data SignupData)(ResultCode int,result string){
     //insert
     if(error_staus==0){
         member_no :=memberNoIncrement()
-        _, err := conn.InsertOne(context.TODO(), bson.D{{"member_no", member_no}, {"email", data.Email},{"password",services.PasswordMd5(data.Password)},{"name",data.Name},{"birthday",data.Birthday},{"country",data.Country},{"state",data.State},{"city",data.City},{"gender",data.Gender},{"create_time",time.Now().Add(time.Hour * 8)}})
+        _, err := conn.InsertOne(context.TODO(), bson.D{{"member_no", member_no}, {"UID", data.UID},{"name",data.Name},{"birthday",data.Birthday},{"country",data.Country},{"state",data.State},{"gender",data.Gender},{"create_time",time.Now().Add(time.Hour * 8)}})
         if err != nil{
             result="格式錯誤！"
             log.Println(err)
