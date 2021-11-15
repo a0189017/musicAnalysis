@@ -9,12 +9,12 @@ import (
 )
 type MemberRecord struct {
     Type string
-    Playmin int
+    Playsec int
 }
 func SetMemberRecord(data MemberRecord,member_no int)(ResultCode int,result interface{}){
 	conn,client :=services.DbConnect("project", "member_record")
     defer client.Disconnect(context.TODO())
-    _,err := conn.InsertOne(context.TODO(), bson.M{"member_no":member_no,"type":data.Type,"playmin":data.Playmin,"date":time.Now().Format("2006-01-02"),"create_time":time.Now().Add(time.Hour * 8)})
+    _,err := conn.InsertOne(context.TODO(), bson.M{"member_no":member_no,"type":data.Type,"playmin":data.Playsec,"date":time.Now().Format("2006-01-02"),"create_time":time.Now().Add(time.Hour * 8)})
  
     if (err==nil){
         result="success"
