@@ -7,11 +7,10 @@ import (
 )
 type MemberInfo struct {
     Member_no int `json:"member_no"`
-    Email string `json:"email"`
     Name string `json:"name"`
     Birthday string `json:"birthday"`
     State string `json:"state"`
-    City string `json:"city"`
+    Country string `json:"country"`
     Gender string `json:"gender"`
 }
 func GetMemberInfo(member_no int)(ResultCode int,result interface{}){
