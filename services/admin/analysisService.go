@@ -104,19 +104,19 @@ func GetAnalysisState()(ResultCode int,result interface{}){
     var dbResultCAN []memberState
     var dbResultOhter []memberCountry
     //USA
-    matchStage := bson.D{{"$match", bson.D{{"country","USA"}}}}
+    matchStage := bson.D{{"$match", bson.D{{"country","United States of America"}}}}
     groupStage := bson.D{{"$group", bson.D{{"_id", "$state"},{"count", bson.D{{"$sum", 1}}}}}}
     sortStage := bson.D{{"$sort", bson.D{{"count", -1}}}}
     resultInfo,_ :=conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage,groupStage,sortStage})
     resultInfo.All(context.TODO(), &dbResultUSA)
     //CAN
-    matchStage = bson.D{{"$match", bson.D{{"country","CAN"}}}}
+    matchStage = bson.D{{"$match", bson.D{{"country","Canada"}}}}
     groupStage = bson.D{{"$group", bson.D{{"_id", "$state"},{"count", bson.D{{"$sum", 1}}}}}}
     sortStage = bson.D{{"$sort", bson.D{{"count", -1}}}}
     resultInfo,_ =conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage,groupStage,sortStage})
     resultInfo.All(context.TODO(), &dbResultCAN)
     //Other
-    matchStage = bson.D{{"$match", bson.D{{"country",bson.M{"$ne":"USA"}},{"country",bson.M{"$ne":"CAN"}}}}}
+    matchStage = bson.D{{"$match", bson.D{{"country",bson.M{"$ne":"United States of America"}},{"country",bson.M{"$ne":"Canada"}}}}}
     groupStage = bson.D{{"$group", bson.D{{"_id", "$country"},{"count", bson.D{{"$sum", 1}}}}}}
     sortStage = bson.D{{"$sort", bson.D{{"count", -1}}}}
     resultInfo,_ =conn.Aggregate(context.TODO(), mongo.Pipeline{matchStage,groupStage,sortStage})
