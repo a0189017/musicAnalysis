@@ -15,7 +15,7 @@ type memberInfo struct {
     Name string
     Birthday string
     State string
-    City string
+    Country string
     Gender string
     Create_time time.Time
 }
