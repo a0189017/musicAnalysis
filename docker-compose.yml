@@ -1,9 +1,15 @@
 version: '3'
 services:
   backend:
-    image: 'a0189017/api'
+    image: 'api'
     container_name: 'music-api'
     build: ./
     restart: always
     ports:
     - "8080:3000"
+  # mongodb:
+  #   image: 'mongo'
+  #   container_name: 'mongodb'
+  #   restart: always
+  #   ports:
+  #   - "27017:27017"
